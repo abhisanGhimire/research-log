@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Research Log</title>
+<meta name="description" content="A doodle-style research log. Everything is saved in your own browser.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='5' y='3' width='22' height='26' rx='3' fill='%23bfe3fa' stroke='%231d3b63' stroke-width='2'/%3E%3Cpath d='M10 11h12M10 16h12M10 21h7' stroke='%231d3b63' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Courier+Prime:wght@400;700&display=swap">
+<style>
+:root{
+  --paper:#eef7fe; --card:#ffffff; --ink:#1d3b63; --muted:#5d7a99; --sky:#5bb5f0; --sky-deep:#2f8fd6;
+  --sky-soft:#d6ecfc; --line:#a9d3f2; --warn:#d9534f; --good:#2e9e6b;
+  --hand:"Caveat","Comic Sans MS",cursive; --body:"Patrick Hand","Comic Sans MS","Segoe Print",sans-serif; --mono:"Courier Prime",Consolas,monospace;
+  --wob:255px 18px 225px 18px/18px 225px 18px 255px;
+  --wob2:18px 225px 18px 255px/255px 18px 225px 18px;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background-color:var(--paper);
+  background-image:radial-gradient(var(--line) 1.2px,transparent 1.3px);background-size:26px 26px;
+  color:var(--ink);font:18px/1.45 var(--body);padding:22px 16px 60px}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--hand);font-weight:700;margin:0;line-height:1.05}
+h1{font-size:46px}
+h2{font-size:30px;margin-bottom:8px}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+.title{position:relative;display:inline-block}
+.title svg.under{position:absolute;left:0;bottom:-10px;width:100%;height:12px}
+.cloud{position:absolute;right:-70px;top:-14px;width:60px}
+.stats{display:flex;gap:14px}
+.stat{background:var(--sky-soft);border:2px solid var(--ink);border-radius:var(--wob);padding:6px 16px;text-align:center;box-shadow:3px 3px 0 var(--ink)}
+.stat b{display:block;font:700 32px/1 var(--hand)}
+.stat span{font-size:14px;color:var(--muted)}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:var(--wob);padding:20px 22px;box-shadow:4px 4px 0 var(--ink);position:relative}
+.card.alt{border-radius:var(--wob2)}
+label{display:block;font-size:15px;color:var(--muted);margin:0 0 3px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:#f7fbff;border:2px solid var(--ink);border-radius:12px 8px 14px 8px;padding:7px 11px;min-width:0}
+textarea{min-height:88px;resize:vertical}
+::placeholder{color:#8fa9c4}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+button{font:inherit;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:var(--wob);padding:7px 18px;cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+button:hover{background:var(--sky-soft)}
+button:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+button.primary{background:var(--sky);font-weight:700}
+button.primary:hover{background:var(--sky-deep);color:#fff}
+button.link{border:0;box-shadow:none;background:none;text-decoration:underline wavy var(--sky-deep);padding:4px 8px}
+button.danger{color:var(--warn)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.row>*{flex:1 1 170px;min-width:0}
+.row>.fit{flex:0 0 auto}
+.clock{font:700 40px/1 var(--mono);letter-spacing:1px}
+.timer-run{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.tag{display:inline-block;font-size:14px;background:var(--sky-soft);border:2px solid var(--ink);border-radius:99px;padding:0 10px}
+.tag.live{background:#d6f5e6}
+.tabs{display:flex;flex-wrap:wrap;gap:10px}
+.tabs button[aria-selected="true"]{background:var(--sky);font-weight:700}
+details.entry{background:var(--card);border:2px solid var(--ink);border-radius:var(--wob2);box-shadow:3px 3px 0 var(--ink)}
+details.entry+details.entry{margin-top:14px}
+summary{cursor:pointer;padding:12px 18px;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸";color:var(--sky-deep)}
+details[open]>summary::before{content:"▾"}
+.when{font:14px var(--mono);color:var(--muted)}
+.task{font-family:var(--hand);font-size:25px;font-weight:700;flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
+.body{padding:2px 20px 18px;display:flex;flex-direction:column;gap:10px}
+.body h3{font-size:21px;color:var(--sky-deep)}
+.body p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.hint{color:var(--muted);margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.stack{display:flex;flex-direction:column;gap:12px}
+.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:14px}
+.msg{color:var(--good)}
+.err{color:var(--warn)}
+.empty{text-align:center;color:var(--muted);padding:10px}
+#exportText{min-height:340px;font:14px/1.5 var(--mono)}
+footer{text-align:center;color:var(--muted);font-size:15px}
+[hidden]{display:none!important}
+@media (max-width:520px){h1{font-size:38px}.cloud{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title">
+      <h1>My Research Log</h1>
+      <svg class="under" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 Q 30 1 60 7 T 120 6 T 180 7 T 240 5 T 298 7" fill="none" stroke="#5bb5f0" stroke-width="4" stroke-linecap="round"/></svg>
+      <svg class="cloud" viewBox="0 0 80 50" aria-hidden="true"><path d="M20 42h42a14 14 0 0 0 2-28 18 18 0 0 0-34-4 16 16 0 0 0-10 32z" fill="#d6ecfc" stroke="#1d3b63" stroke-width="2.5" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="stats"><div class="stat"><b id="sHours">0</b><span>hours</span></div><div class="stat"><b id="sCount">0</b><span>entries</span></div></div>
+  </header>
+
+  <section class="card" id="timerCard" aria-label="Timer"></section>
+  <section class="card alt" id="formCard" hidden aria-label="Entry form"></section>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" id="tabLog" aria-selected="true">📒 Log</button>
+    <button role="tab" id="tabStudy" aria-selected="false">🔬 Study</button>
+    <button role="tab" id="tabExport" aria-selected="false">🤖 For AI</button>
+    <button role="tab" id="tabBackup" aria-selected="false">💾 Backup</button>
+  </nav>
+
+  <section id="paneLog">
+    <div class="row" style="margin-bottom:16px">
+      <input id="search" type="search" placeholder="Search my entries..." aria-label="Search entries">
+      <button class="fit" id="btnAddPast">+ Log past work</button>
+    </div>
+    <div id="list"></div>
+  </section>
+
+  <section id="paneStudy" class="card" hidden>
+    <h2>The study</h2>
+    <p class="hint">Fill this in once. The AI reads it with every export so it understands your entries. It saves as you type.</p>
+    <div class="grid" id="studyFields"></div>
+  </section>
+
+  <section id="paneExport" class="card alt" hidden>
+    <h2>Feed it to an AI</h2>
+    <p class="hint">Copy this, paste it into an AI chat, and ask for Methods, Results, Discussion or Limitations.</p>
+    <textarea id="exportText" readonly aria-label="Export text"></textarea>
+    <div class="actions"><button class="primary" id="btnCopy">Copy all</button><button id="btnMd">Download .md</button><span class="msg" id="exportMsg"></span></div>
+  </section>
+
+  <section id="paneBackup" class="card" hidden>
+    <h2>Backup</h2>
+    <p class="hint">Your log lives only in this browser on this device. Clearing site data erases it, so download a backup now and then. You can restore it here, or on another device.</p>
+    <div class="actions">
+      <button class="primary" id="btnBackup">Download backup (.json)</button>
+      <button id="btnRestore">Restore from backup</button>
+      <input type="file" id="fileRestore" accept="application/json,.json" hidden>
+      <span class="msg" id="backupMsg"></span>
+    </div>
+  </section>
+
+  <footer>Saved in your browser only. Nothing is sent anywhere. ☁️</footer>
+</div>
+
+<script>
+const PHASES=['Planning','Reading original paper','Data collection','Cleaning','Coding','Analysis','Writing','Other'];
+const STUDY_FIELDS=[
+ ['paper','Original paper (citation, year, venue)'],['origRQ','Original research questions / hypotheses'],
+ ['origData','Original data (platform, groups, dates, N)'],['origMethod','Original method (sampling, coding, stats)'],
+ ['origFindings','Original headline findings'],['repType','Replication type (exact / conceptual / extension)'],
+ ['myRQ','My research questions / hypotheses'],['deviations','Deviations from the original, and why'],
+ ['myData','My data (source, dates, N, inclusion rules)'],['tools','Tools and versions'],
+ ['codebook','Codebook, coders, reliability plan'],['ethics','Ethics approval and data handling'],
+ ['glossary','Glossary of terms as I use them']];
+const SECTIONS=[['did','What I did','Concrete, reproducible steps: tools, settings, queries, file names, counts.'],
+ ['decisions','Decisions and why','Any choice that affects the method. Note if it deviates from the original paper.'],
+ ['findings','Findings','Observations and numbers. Facts only.'],
+ ['conclusion','Interpretation / conclusion','What it means, how it compares with the original, how confident you are.'],
+ ['problems','Problems / open questions',''],['next','Next steps',''],
+ ['paper','Possible paper section','Methods, Results, Discussion or Limitations: where this belongs.']];
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const dLocal=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const tLocal=d=>`${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const inputVal=d=>`${dLocal(d)}T${tLocal(d)}`;
+const fmtDur=m=>m>=60?`${Math.floor(m/60)}h ${pad(m%60)}m`:`${m} min`;
+const uid=()=>(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2));
+
+/* ---- storage: everything in localStorage under one key ---- */
+const KEY='research-log.v1';
+let S={entries:[],study:{},timer:{active:false}};
+try{const raw=localStorage.getItem(KEY); if(raw)S=Object.assign(S,JSON.parse(raw))}catch{}
+let saveWarned=false;
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(S))}
+  catch{if(!saveWarned){saveWarned=true;alert('This browser would not save your data (private mode or blocked storage). Download a backup before you close the page.')}}
+}
+
+let tick=null, editing=null, delArm=null;
+
+function stats(){
+  const mins=S.entries.reduce((a,e)=>a+(+e.minutes||0),0);
+  $('sHours').textContent=(mins/60).toFixed(1); $('sCount').textContent=S.entries.length;
+}
+
+/* ---- timer ---- */
+const T=()=>S.timer;
+const elapsedMin=()=>Math.max(0,Math.round((Date.now()-new Date(T().start))/60000));
+function clockText(){const s=Math.max(0,Math.floor((Date.now()-new Date(T().start))/1000));
+  return `${pad(Math.floor(s/3600))}:${pad(Math.floor(s%3600/60))}:${pad(s%60)}`}
+function renderTimer(){
+  const c=$('timerCard'); clearInterval(tick);
+  if(!T().active){
+    c.innerHTML=`<h2>Start working ✏️</h2><div class="row">
+      <div><label for="tTask">What are you working on?</label><input id="tTask" placeholder="e.g. Collect videos from channel list"></div>
+      <div><label for="tPhase">Phase</label><select id="tPhase">${PHASES.map(p=>`<option>${p}</option>`).join('')}</select></div>
+      <button class="primary fit" id="tStart">Start timer</button></div>`;
+    $('tStart').onclick=startTimer; $('tTask').onkeydown=e=>{if(e.key==='Enter')startTimer()};
+    return;
+  }
+  c.innerHTML=`<div class="timer-run"><div><span class="tag live">● running</span> <span class="tag">${esc(T().phase)}</span>
+    <h2 style="margin:6px 0 0;overflow-wrap:anywhere">${esc(T().task)}</h2></div>
+    <div class="clock" id="clock">${clockText()}</div></div>
+    <div class="row" style="margin-top:14px"><div><label for="tNote">Quick note (gets a time stamp)</label><input id="tNote" placeholder="e.g. scraper hit rate limit, set 5s delay"></div>
+    <button class="fit" id="tAddNote">Add note</button><button class="primary fit" id="tStop">Stop and write up</button></div>
+    <ul style="margin:12px 0 0;padding-left:22px;color:var(--muted)">${(T().notes||[]).map(n=>`<li>${esc(n)}</li>`).join('')}</ul>`;
+  tick=setInterval(()=>{const el=$('clock'); if(el)el.textContent=clockText()},1000);
+  $('tAddNote').onclick=addNote; $('tNote').onkeydown=e=>{if(e.key==='Enter')addNote()};
+  $('tStop').onclick=stopTimer;
+}
+function startTimer(){
+  const task=$('tTask').value.trim(); if(!task){$('tTask').focus();return}
+  S.timer={active:true,start:new Date().toISOString(),task,phase:$('tPhase').value,notes:[]}; save(); renderTimer();
+}
+function addNote(){
+  const v=$('tNote').value.trim(); if(!v)return;
+  S.timer.notes=[...(S.timer.notes||[]),`[${tLocal(new Date())}] ${v}`]; save(); renderTimer(); $('tNote').focus();
+}
+function stopTimer(){
+  openForm({id:null,task:T().task,phase:T().phase,start:T().start,minutes:Math.max(1,elapsedMin()),
+    did:(T().notes||[]).map(n=>'- '+n).join('\n'),fromTimer:true});
+}
+
+/* ---- entry form ---- */
+function openForm(e){
+  editing=e; const c=$('formCard'); c.hidden=false; const s=new Date(e.start);
+  c.innerHTML=`<h2>${e.id?'Edit entry':e.fromTimer?'Write up this session 📝':'Log past work'}</h2>
+   <div class="row"><div style="flex:2 1 240px"><label for="fTask">Task</label><input id="fTask" value="${esc(e.task)}"></div>
+   <div><label for="fPhase">Phase</label><select id="fPhase">${PHASES.map(p=>`<option${p===e.phase?' selected':''}>${p}</option>`).join('')}</select></div></div>
+   <div class="row" style="margin-top:12px"><div><label for="fStart">Started</label><input id="fStart" type="datetime-local" value="${inputVal(s)}"></div>
+   <div><label for="fMin">Minutes spent</label><input id="fMin" type="number" min="1" value="${e.minutes||''}"></div></div>
+   <div class="stack" style="margin-top:12px">${SECTIONS.map(([k,t,h])=>
+     `<div><label for="f_${k}">${t}</label><textarea id="f_${k}" placeholder="${esc(h)}">${esc(e[k]||'')}</textarea></div>`).join('')}</div>
+   <div class="actions"><button class="primary" id="fSave">Save entry</button><button id="fCancel">Cancel</button><span class="err" id="fErr"></span></div>`;
+  $('fCancel').onclick=closeForm; $('fSave').onclick=saveEntry;
+  c.scrollIntoView({behavior:'smooth',block:'start'}); $('fTask').focus();
+}
+function closeForm(){editing=null;$('formCard').hidden=true;$('formCard').innerHTML=''}
+function saveEntry(){
+  const task=$('fTask').value.trim(), minutes=parseInt($('fMin').value,10), start=new Date($('fStart').value);
+  if(!task||!(minutes>0)||isNaN(start)){$('fErr').textContent='Add a task, a start time and minutes spent.';return}
+  const o={id:editing.id||uid(),task,phase:$('fPhase').value,minutes,start:start.toISOString(),
+    end:new Date(start.getTime()+minutes*60000).toISOString()};
+  SECTIONS.forEach(([k])=>o[k]=$('f_'+k).value.trim());
+  const i=S.entries.findIndex(e=>e.id===o.id);
+  if(i>=0)S.entries[i]=o; else S.entries.push(o);
+  if(editing.fromTimer)S.timer={active:false};
+  save(); closeForm(); renderTimer(); renderList(); renderExport();
+}
+
+/* ---- list ---- */
+function renderList(){
+  stats(); const q=$('search').value.toLowerCase().trim(); const L=$('list');
+  const sorted=[...S.entries].sort((a,b)=>a.start<b.start?1:-1);
+  const shown=sorted.filter(e=>!q||JSON.stringify(e).toLowerCase().includes(q));
+  if(!shown.length){L.innerHTML=`<div class="card empty">${S.entries.length?'No entries match your search.':'No entries yet. Start the timer above, or tap “+ Log past work”. ☁️'}</div>`;return}
+  const open=new Set([...L.querySelectorAll('details[open]')].map(d=>d.dataset.id));
+  L.innerHTML=shown.map(e=>{const d=new Date(e.start);
+    return `<details class="entry" data-id="${esc(e.id)}"${open.has(e.id)?' open':''}><summary>
+      <span class="when">${dLocal(d)} ${tLocal(d)}</span><span class="task">${esc(e.task)}</span>
+      <span class="tag">${esc(e.phase)}</span><span class="when">${fmtDur(+e.minutes||0)}</span></summary>
+      <div class="body">${SECTIONS.map(([k,t])=>e[k]?`<div><h3>${t}</h3><p>${esc(e[k])}</p></div>`:'').join('')||'<span class="hint">No details written yet. Tap Edit to add some.</span>'}
+      <div class="actions" style="margin:0"><button data-edit="${esc(e.id)}">Edit</button>
+      <button class="link danger" data-del="${esc(e.id)}">${delArm===e.id?'Tap again to delete':'Delete'}</button></div></div></details>`}).join('');
+  L.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openForm({...S.entries.find(x=>x.id===b.dataset.edit)}));
+  L.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    if(delArm!==b.dataset.del){delArm=b.dataset.del;renderList();return}
+    delArm=null; S.entries=S.entries.filter(x=>x.id!==b.dataset.del); save(); renderList(); renderExport();});
+}
+
+/* ---- study ---- */
+function buildStudy(){
+  const f=$('studyFields');
+  f.innerHTML=STUDY_FIELDS.map(([k,t])=>`<div><label for="s_${k}">${t}</label><textarea id="s_${k}">${esc(S.study[k]||'')}</textarea></div>`).join('');
+  f.querySelectorAll('textarea').forEach(t=>t.oninput=()=>{S.study[t.id.slice(2)]=t.value;save()});
+}
+
+/* ---- export ---- */
+function compile(){
+  const asc=[...S.entries].sort((a,b)=>a.start<b.start?-1:1);
+  const total=S.entries.reduce((a,e)=>a+(+e.minutes||0),0);
+  let o=`# INSTRUCTIONS FOR THE AI\nBelow are the study overview and a chronological research log of a replication study. Use them to help me write the paper. When asked, draft or suggest: Methods (reproducible, with deviations from the original flagged), Results (only what the log supports), Discussion (comparison with the original findings) and Limitations. Cite entry dates when you rely on an entry. Do not invent facts, numbers or decisions that are not in the log; list anything missing as questions for me.\n\nEntries: ${asc.length} | Total logged time: ${(total/60).toFixed(1)} h | Compiled: ${dLocal(new Date())} ${tLocal(new Date())}\n\n---\n# STUDY OVERVIEW\n`;
+  STUDY_FIELDS.forEach(([k,t])=>{o+=`- ${t}: ${(S.study[k]||'(not filled in)').replace(/\n/g,'\n  ')}\n`});
+  o+=`\n---\n# RESEARCH LOG\n`;
+  asc.forEach(e=>{const d=new Date(e.start);
+    o+=`\n## ENTRY ${dLocal(d)} ${tLocal(d)} | ${e.minutes} min | ${e.phase} | ${e.task}\n`;
+    SECTIONS.forEach(([k,t])=>{if(e[k])o+=`\n### ${t}\n${e[k]}\n`});});
+  return o;
+}
+function renderExport(){if(!$('paneExport').hidden)$('exportText').value=compile()}
+function flash(id,t){$(id).textContent=t;setTimeout(()=>$(id).textContent='',3500)}
+function download(name,text,type){
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+$('btnCopy').onclick=async()=>{
+  const t=$('exportText'); t.value=compile();
+  try{await navigator.clipboard.writeText(t.value);flash('exportMsg','Copied!')}
+  catch{t.focus();t.select();flash('exportMsg','Press Ctrl+C to copy the selected text')}
+};
+$('btnMd').onclick=()=>download(`research-log-${dLocal(new Date())}.md`,compile(),'text/markdown');
+$('btnBackup').onclick=()=>{download(`research-log-backup-${dLocal(new Date())}.json`,JSON.stringify(S,null,2),'application/json');flash('backupMsg','Backup downloaded')};
+$('btnRestore').onclick=()=>$('fileRestore').click();
+$('fileRestore').onchange=async e=>{
+  const f=e.target.files[0]; if(!f)return;
+  try{
+    const d=JSON.parse(await f.text());
+    if(!Array.isArray(d.entries))throw 0;
+    const ids=new Set(S.entries.map(x=>x.id));
+    d.entries.forEach(x=>{if(!x.id)x.id=uid(); if(!ids.has(x.id))S.entries.push(x)});
+    if(d.study&&!Object.values(S.study).some(Boolean))S.study=d.study;
+    save(); buildStudy(); renderList(); renderExport(); flash('backupMsg','Restored. Entries already here were kept.');
+  }catch{flash('backupMsg','That file is not a research log backup.');$('backupMsg').className='err'}
+  e.target.value='';
+};
+
+/* ---- tabs ---- */
+function show(tab){
+  const m={Log:'paneLog',Study:'paneStudy',Export:'paneExport',Backup:'paneBackup'};
+  Object.entries(m).forEach(([k,p])=>{$(p).hidden=k!==tab;$('tab'+k).setAttribute('aria-selected',k===tab)});
+  if(tab==='Export')renderExport(); $('backupMsg').className='msg';
+}
+['Log','Study','Export','Backup'].forEach(t=>$('tab'+t).onclick=()=>show(t));
+$('btnAddPast').onclick=()=>openForm({id:null,task:'',phase:'Planning',start:new Date(Date.now()-3600000).toISOString(),minutes:60});
+$('search').oninput=renderList;
+
+buildStudy(); renderTimer(); renderList();
+</script>
+</body>
+</html>
